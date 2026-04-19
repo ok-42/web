@@ -1,0 +1,25 @@
+{
+	default_sni 1.2.3.4
+}
+
+1.2.3.4 {
+	tls /etc/letsencrypt/live/1.2.3.4/fullchain.pem /etc/letsencrypt/live/1.2.3.4/privkey.pem
+
+	# https://caddyserver.com/docs/caddyfile/directives/basic_auth#examples
+	basicauth {
+		Bob $2a$14$Zkx19XLiW6VYouLHR5NmfOFU0z2GTNmpkT/5qqR7hx4IjWJPDhjvG
+	}
+
+    root * /usr/share/caddy
+	file_server
+	reverse_proxy localhost:8000
+
+	log {
+		output file /var/log/caddy/access.log {
+			roll_keep_for 30d
+		}
+        format filter {
+            wrap json
+        }
+	}
+}
